@@ -6,12 +6,17 @@
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "cross-env NODE_ENV=production nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
+    "bulid:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
   },
   "author": "Mohamed ELbohy",
   "license": "ISC",
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "express": "^4.19.2",
@@ -40,6 +45,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.35.0",
     "ndb": "^1.1.5",
+    "parcel-bundler": "^1.12.5",
     "prettier": "^3.3.3"
   }
 }
