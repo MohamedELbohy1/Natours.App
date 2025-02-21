@@ -94,15 +94,15 @@ exports.protect = asyncHandler(async (req, res, next) => {
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
   //3) check if user is still exists
-  const freshUser = await User.findById(decoded.id);
-  if (!freshUser) {
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
     next(
       new AppError('The user is belonging to token is no longer exist', 401),
     );
   }
 
   //4) check if user changed password after token was issued
-  if (freshUser.changedPasswordAfter(decoded.iat)) {
+  if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
       new AppError(
         'The user recently changed password!,please login again.',
@@ -112,7 +112,9 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
 
   // Griant access protected route
-  req.user = freshUser;
+  req.user = currentUser;
+  res.locals.user = currentUser;
+
   next();
 });
 
