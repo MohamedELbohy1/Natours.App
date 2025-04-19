@@ -15,6 +15,8 @@ const globalErrorHandler = require('./Controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoute');
+const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./Controllers/bookingController');
 const viewRouter = require('./routes/viewRoutes');
 const { nextTick, title } = require('process');
 
@@ -40,8 +42,15 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout,
+); ////////////////////
+
 //Body Praser, reading from body from req.body
 app.use(express.json({ limit: '10kb' })); //Middleware
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
 //Data Sanitization aginst NoSQL Query Injection
@@ -75,6 +84,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
   /*
