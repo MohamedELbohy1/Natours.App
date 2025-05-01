@@ -62,7 +62,7 @@ app.use(xss());
 app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
-    "script-src 'self' https://cdnjs.cloudflare.com",
+    "script-src 'self' https://cdnjs.cloudflare.com https://js.stripe.com;",
   );
   next();
 });
