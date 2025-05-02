@@ -5,9 +5,17 @@ const handleCastErrorDB = (err) => {
   return new AppError(message, 400);
 };
 const handleDuplicateFieldsDB = (err) => {
-  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-  console.log(value);
-  const message = `Duplicate field value: ${value} .please use anthor value!`;
+  let value = '';
+  if (err.errmsg && typeof err.errmsg === 'string') {
+    const match = err.errmsg.match(/(["'])(\\?.)*?\1/);
+    value = match ? match[0] : 'duplicate value';
+  } else if (err.keyValue) {
+    value = JSON.stringify(err.keyValue); // MongoDB >= 4.4
+  } else {
+    value = 'Unknown field';
+  }
+
+  const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
 };
 

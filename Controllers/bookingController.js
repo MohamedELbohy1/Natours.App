@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Tour = require('../modules/tourModel');
-const booking = require('../modules/bookingModel');
+const Booking = require('../modules/bookingModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppErorr = require('../utils/appError');
 const Factory = require('./handlerFactory');
@@ -50,6 +50,12 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
 
   res.redirect(req.originalUrl.split('?')[0]);
 });
+
+exports.createBooking = Factory.createOne(Booking);
+exports.getBooking = Factory.getOne(Booking);
+exports.getAllBooking = Factory.getAll(Booking);
+exports.updateBooking = Factory.updateOne(Booking);
+exports.deleteBooking = Factory.deleteOne(Booking);
 
 // exports.webhookCheckout = (req, res, next) => {
 //   const signature = req.headers['stripe-signature'];
