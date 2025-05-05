@@ -10,12 +10,15 @@ const app = require('./app');
 
 //mongoose.connect(process.env.DATABASE_LOCAL,{
 mongoose
-  .connect(process.env.DATABASE)
-  .then((con) => {
-    console.log('DB Connected Succssefully');
+  .connect(process.env.DATABASE, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log('DB Connected Successfully');
   })
   .catch((err) => {
-    console.log(`There was and error ${err}`);
+    console.log(`There was an error: ${err}`);
     process.exit(1);
   });
 
