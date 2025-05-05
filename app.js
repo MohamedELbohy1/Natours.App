@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 //Start Express App
 const app = express();
 
@@ -66,6 +67,8 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+app.use(compression());
 
 // Test middleware
 app.use((req, res, next) => {
