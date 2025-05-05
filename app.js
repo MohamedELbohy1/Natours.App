@@ -76,6 +76,9 @@ app.use((req, res, next) => {
   // console.log(req.cookies);
   next();
 });
+app.get('/', (req, res) => {
+  res.send('Welcome to Turjuman API 🚀');
+});
 
 //app.get('/api/v1/tours', getallTours);
 //app.post('/api/v1/tours', createTour);
@@ -90,10 +93,6 @@ app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
-  /*
-   const err=new Error(`Cant find ${req.originalUrl} on this srever!`);
-   err.status='fail';
-   err.statusCode=404;*/
   next(new AppErorr(`Cant find ${req.originalUrl} on this srever!`, 404));
 });
 app.use(globalErrorHandler);
