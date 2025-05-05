@@ -15,7 +15,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log('DB Connected Successfully');
+    console.log('DB Connected Successfully ✅');
   })
   .catch((err) => {
     console.log(`There was an error: ${err}`);
@@ -32,7 +32,7 @@ app.listen(port, () => {
 process.on('uncaughtException', (err) => {
   console.log(`uncaughtException error: ${err.name}|${err.message}`);
   server.close(() => {
-    console.log('Shutting Down The Server....');
+    console.log('Shutting Down The Server🔥....');
     process.exit(1);
   });
 });
