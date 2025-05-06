@@ -17,7 +17,6 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoute');
 const bookingRouter = require('./routes/bookingRoutes');
-const bookingController = require('./Controllers/bookingController');
 const viewRouter = require('./routes/viewRoutes');
 const { nextTick, title } = require('process');
 
