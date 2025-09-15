@@ -7,6 +7,7 @@ const app = require('./app');
 //   '<PASSWORD>',
 //   process.env.DATABASE_PASSWORD,
 // );
+console.log('DATABASE:', process.env.DATABASE);
 
 //mongoose.connect(process.env.DATABASE_LOCAL,{
 mongoose

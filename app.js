@@ -75,9 +75,6 @@ app.use((req, res, next) => {
   // console.log(req.cookies);
   next();
 });
-app.get('/', (req, res) => {
-  res.send('Welcome to Turjuman API 🚀');
-});
 
 //app.get('/api/v1/tours', getallTours);
 //app.post('/api/v1/tours', createTour);
