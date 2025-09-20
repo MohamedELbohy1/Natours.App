@@ -21,7 +21,7 @@ const cloudinary = require('../utils/cloudinary');
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: 'natours/users', // هيترفع جوه فولدر كده
+    folder: 'public/img/users', // هيترفع جوه فولدر كده
     allowed_formats: ['jpg', 'png', 'jpeg'],
     transformation: [{ width: 500, height: 500, crop: 'limit' }],
   },
@@ -48,19 +48,19 @@ exports.uploadUserPhoto = upload.single('photo');
 
 // exports.uploadUserPhoto = upload.single('photo');
 
-exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
-  if (!req.file) return next();
+// exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
+//   if (!req.file) return next();
 
-  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+//   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 
-  await sharp(req.file.buffer)
-    .resize(500, 500)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.file.filename}`);
+//   await sharp(req.file.buffer)
+//     .resize(500, 500)
+//     .toFormat('jpeg')
+//     .jpeg({ quality: 90 })
+//     .toFile(`public/img/users/${req.file.filename}`);
 
-  next();
-});
+//   next();
+// });
 const filterObj = (obj, ...allowedfileds) => {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
@@ -81,10 +81,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
 
   // 2- جهز البيانات اللي هتتحدث
-  const filteredBody = {
-    name: req.body.name,
-    email: req.body.email,
-  };
+  const filteredBody = filterObj(req.body, 'name', 'email');
 
   // 3- لو فيه صورة جديدة اترفع رابطها من Cloudinary
   if (req.file) filteredBody.photo = req.file.path; // Cloudinary بيرجع URL هنا
