@@ -14,22 +14,40 @@ const sharp = require('sharp');
 //     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
 //   },
 // });
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../utils/cloudinary');
 
-const multerStorage = multer.memoryStorage();
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new AppError('Not an Image! Please upload Only Images', 400), false);
-  }
-};
-
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter,
+// إعداد التخزين على Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'natours/users', // هيترفع جوه فولدر كده
+    allowed_formats: ['jpg', 'png', 'jpeg'],
+    transformation: [{ width: 500, height: 500, crop: 'limit' }],
+  },
 });
 
+const upload = multer({ storage });
+
+// Middleware لرفع صورة واحدة
 exports.uploadUserPhoto = upload.single('photo');
+
+// const multerStorage = multer.memoryStorage();
+// const multerFilter = (req, file, cb) => {
+//   if (file.mimetype.startsWith('image')) {
+//     cb(null, true);
+//   } else {
+//     cb(new AppError('Not an Image! Please upload Only Images', 400), false);
+//   }
+// };
+
+// const upload = multer({
+//   storage: multerStorage,
+//   fileFilter: multerFilter,
+// });
+
+// exports.uploadUserPhoto = upload.single('photo');
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
@@ -58,21 +76,21 @@ exports.getMe = (req, res, next) => {
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  //1) create error if user update password
+  // 1- لو المستخدم بعت باسورد → امنعه
   if (req.body.password || req.body.passwordConfirm) {
-    return next(
-      new AppError(
-        'This route is not for update password ,please use /updateMyPassword',
-        400,
-      ),
-    );
+    return next(new AppError('This route is not for password updates.', 400));
   }
 
-  //2) filtered out unwanted fileds name that not allowed to be updated
-  const filteredBody = filterObj(req.body, 'name', 'email');
-  if (req.file) filteredBody.photo = req.file.filename;
+  // 2- جهز البيانات اللي هتتحدث
+  const filteredBody = {
+    name: req.body.name,
+    email: req.body.email,
+  };
 
-  //3)Update user Doucment
+  // 3- لو فيه صورة جديدة اترفع رابطها من Cloudinary
+  if (req.file) filteredBody.photo = req.file.path; // Cloudinary بيرجع URL هنا
+
+  // 4- اعمل update
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
