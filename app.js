@@ -75,9 +75,9 @@ app.use((req, res, next) => {
   // console.log(req.cookies);
   next();
 });
-app.get('/', (req, res) => {
-  res.redirect('/login');
-});
+// app.get('/', (req, res) => {
+//   res.redirect('/');
+// });
 
 //app.get('/api/v1/tours', getallTours);
 //app.post('/api/v1/tours', createTour);
